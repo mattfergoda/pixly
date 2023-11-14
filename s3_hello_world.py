@@ -9,6 +9,7 @@ load_dotenv()
 AWS_ACCESS_KEY = os.environ['AWS_ACCESS_KEY']
 AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 REGION = os.environ['REGION']
+BUCKET_NAME = os.environ['BUCKET_NAME']
 
 #print(REGION)
 
@@ -40,6 +41,6 @@ def upload_file(file_name, bucket, object_name=None):
         return False
     return True
 
-#upload_file('indy.gif', 'pixly-jb')
+upload_file('spidermonkey_headshot.webp', BUCKET_NAME)
 
-#s3.download_file('pixly-jb', '2.gif', 'two.gif')
+#s3.download_file(BUCKET_NAME, 'Geoffroy-spider-monkey.webp', 'geoffroy.webp')
