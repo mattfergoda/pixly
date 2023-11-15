@@ -11,7 +11,6 @@ AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 REGION = os.environ['REGION']
 BUCKET_NAME = os.environ['BUCKET_NAME']
 
-#print(REGION)
 
 s3 = boto3.client(
   "s3",
@@ -41,6 +40,6 @@ def upload_file(file_name, bucket, object_name=None):
         return False
     return True
 
-upload_file('spidermonkey_headshot.webp', BUCKET_NAME)
+#upload_file('indy2.gif', BUCKET_NAME, 'indy.gif')
 
-#s3.download_file(BUCKET_NAME, 'Geoffroy-spider-monkey.webp', 'geoffroy.webp')
+s3.download_file(BUCKET_NAME, 'indy.gif', 'newindy.gif')
