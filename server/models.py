@@ -31,6 +31,22 @@ class Image(db.Model):
         db.JSON()
     )
 
+    uploaded_at = db.Column(
+        db.DateTime,
+        nullable=False,
+        default=db.func.now()
+    )
+
+
+
+def connect_db(app):
+    """Connect to database."""
+
+    app.app_context().push()
+    db.app = app
+    db.init_app(app)
+
+
 # class Metadata(db.Model):
 #     """ Data model for exif tags on images """
 
@@ -72,9 +88,3 @@ class Image(db.Model):
     #     }
 
 
-def connect_db(app):
-    """Connect to database."""
-
-    app.app_context().push()
-    db.app = app
-    db.init_app(app)

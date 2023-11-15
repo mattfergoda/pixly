@@ -15,14 +15,28 @@ app.config['SQLALCHEMY_ECHO'] = True
 
 connect_db(app)
 
-app.config['SECRET_KEY'] = "I'LL NEVER TELL!!"
+
 
 # app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
-@app.get("/api/images")
-def list_images():
-    """Return JSON  { }."""
 
+@app.post("/images")
+def upload_image():
+    """ Takes in a multipart form:
+    { caption: 'Debbie at sunset', description: 'Blessed to have captured this moment,
+      image_file: [binary]
+
+      Returns
+    }
+    """
+
+    caption = request.form['caption']
+    description = request.form['description']
+
+    image_file = request.files['image_file']
+
+
+    
 
 
     return "hello"
