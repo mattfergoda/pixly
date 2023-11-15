@@ -35,24 +35,21 @@ def upload_image():
     file_name = request.form['file_name']
     image_file = request.files['image_file']
 
-    print('IMAGE FILE', image_file.stream)
-
     # check if image_file filename is already in db.
-    # image = Image.query.get(file_name)
-    # if image:
-    #     return jsonify(error={
-    #         "status": "400",
-    #         "message": "Image name already taken"
-    #     })
+    if Image.query.get(file_name):
+        return jsonify(error={
+            "status": "400",
+            "message": "Image name already taken"
+        }), 400
 
     # scrape metadata
     exif_data = scrape_exif(image_file)
 
+    image_file.seek(0)
     # save image in s3 and get back image url
     content_type = image_file.content_type
-    print('CONTENT-TYPE=', image_file.content_type) #CONTENT-TYPE= image/jpeg
 
-    aws_image_src = upload_file(image_file.stream, file_name, content_type)
+    aws_image_src = upload_file(image_file, file_name, content_type)
 
     # save metadata and other data in db.
     new_image = Image(
@@ -68,19 +65,11 @@ def upload_image():
 
     # figure out what we send back to the user and send it.
 
-    # make this 201
-    return jsonify(image={
+    return (jsonify(image={
         "file_name": file_name,
         "caption": caption,
         "description": description,
         "aws_image_src": aws_image_src,
         "exif_data": exif_data
-    })
+    }), 201)
 
-
-### images are not displaying even though they're moving around correctly,
-# able to upload to s3 via API
-# able to pull metadata
-# file is getting corrupted and won't display online or when downloaded
-# did a lot with validating content type, seems to be working
-# did research on the file storage object that comes back from request.files
