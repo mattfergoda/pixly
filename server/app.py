@@ -3,8 +3,8 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 
 from models import db, connect_db, Image
-from exif import scrape_exif
-from s3 import upload_file
+from image_utils import scrape_exif, convert_monochrome, convert_to_PIL_image
+from s3 import upload_file, get_s3_file
 
 load_dotenv()
 
@@ -14,11 +14,41 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
+# app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+
 connect_db(app)
 
 
 
-# app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+@app.get("/images")
+def get_all_images():
+    """ Returns JSON like { images: [image, ...] }
+        where image is { file_name, caption, description, aws_image_src, exif_data }
+    """
+
+    images = Image.query.all()
+
+    serialized = [img.serialize() for img in images]
+
+    return jsonify(images=serialized)
+
+
+@app.get("/images/<string:file_name>")
+def get_image(file_name):
+    """ Returns JSON like { file_name, caption, description, aws_image_src, exif_data }
+    """
+
+    image = Image.query.get(file_name)
+
+    if not image:
+        return jsonify(error={
+            "status": "404",
+            "message": "Image not found"
+        }), 404
+
+    return jsonify(image=image.serialize())
+
+
 
 
 @app.post("/images")
@@ -47,9 +77,9 @@ def upload_image():
 
     image_file.seek(0)
     # save image in s3 and get back image url
-    content_type = image_file.content_type
+    # content_type = image_file.content_type
 
-    aws_image_src = upload_file(image_file, file_name, content_type)
+    aws_image_src = upload_file(image_file, file_name)
 
     # save metadata and other data in db.
     new_image = Image(
@@ -73,3 +103,39 @@ def upload_image():
         "exif_data": exif_data
     }), 201)
 
+
+
+@app.patch("/images/<string:file_name>")
+def edit_image(file_name):
+    """ Takes in an object with the properties to edit {property: new value, ... }"""
+
+    image = Image.query.get(file_name)
+
+    if not image:
+        return jsonify(error={
+            "status": "404",
+            "message": "Image not found"
+        }), 404
+
+    image.caption = request.json.get('caption', image.caption)
+    image.description = request.json.get('description',image.description)
+    bw = request.json.get('bw')
+
+    if bw is True:
+        # download file from s3
+        image_binary = get_s3_file(file_name)
+
+        # create PIL Image
+        img = convert_to_PIL_image(image_binary)
+
+        # convert to black and white
+        bw_img = convert_monochrome(img)
+
+        # save updated image in s3
+        upload_file(bw_img, file_name)
+
+
+    # update postgres db
+    db.session.commit()
+
+    return jsonify(msg=f"sucessfully updated {file_name}")

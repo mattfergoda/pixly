@@ -38,6 +38,19 @@ class Image(db.Model):
     )
 
 
+    def serialize(self):
+        """Serialize to a dictionary."""
+
+        return {
+            "file_name": self.file_name,
+            "caption": self.caption,
+            "description": self.description,
+            "aws_image_src": self.aws_image_src,
+            "exif_data": self.exif_data,
+            "uploaded_at": self.uploaded_at
+        }
+
+
 
 def connect_db(app):
     """Connect to database."""

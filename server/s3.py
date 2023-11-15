@@ -19,12 +19,11 @@ s3 = boto3.client(
   aws_secret_access_key=AWS_SECRET_ACCESS_KEY
 )
 
-def upload_file(image_binary, file_name, content_type):
+def upload_file(image_binary, file_name):
     """Upload a file to an S3 bucket
 
     :param image_binary: Image binary file to upload
     :param file_name: file_name. Will correspond to object key in S3
-    :param bucket: Bucket to upload to
     :return: aws_image_src: URL to image in S3
      """
 
@@ -36,7 +35,7 @@ def upload_file(image_binary, file_name, content_type):
             Body=image_binary,
             Bucket=BUCKET_NAME,
             Key=file_name,
-            ContentType=content_type
+            ContentType=image_binary.content_type
         )
 
         # url = f"{bucket_name}.s3.{location}.amazonaws.com/{key}"
@@ -49,4 +48,9 @@ def upload_file(image_binary, file_name, content_type):
     return aws_image_src
 
 
-# s3.download_file(BUCKET_NAME, 'indy.gif', 'newindy.gif')
+def get_s3_file(file_name):
+    """ Takes in a file name , returns StreamingBody object """
+
+    response = s3.get_object(BUCKET_NAME, file_name)
+
+    return response.body

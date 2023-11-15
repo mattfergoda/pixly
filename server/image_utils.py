@@ -24,3 +24,15 @@ def scrape_exif(image):
                 metadata[key] = val
 
     return metadata
+
+
+def convert_to_PIL_image(image_binary):
+    """ Takes in an image binary and returns a PIL Image object """
+    
+    return Image.open(image_binary)
+
+
+def convert_monochrome(image):
+    """ Takes in a PIL Image, returns PIL Image in black and white """
+
+    return image.convert("L")
