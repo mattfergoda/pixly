@@ -1,4 +1,4 @@
-from PIL import Image, ExifTags
+from PIL import Image, ExifTags, TiffImagePlugin
 
 def scrape_exif(image):
     """
@@ -18,7 +18,7 @@ def scrape_exif(image):
     else:
         for key, val in img_exif.items():
             if key in ExifTags.TAGS:
-                metadata[ExifTags.TAGS[key]] = val
+                metadata[ExifTags.TAGS[key]] = float(val) if isinstance(val, TiffImagePlugin.IFDRational) else val
             else:
                 print(f'{key}:{val}')
                 metadata[key] = val

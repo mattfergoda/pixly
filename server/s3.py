@@ -19,15 +19,14 @@ s3 = boto3.client(
   aws_secret_access_key=AWS_SECRET_ACCESS_KEY
 )
 
-def upload_file(image_binary, file_name):
+def upload_file(image_binary, file_name, content_type):
     """Upload a file to an S3 bucket
 
     :param image_binary: Image binary file to upload
     :param file_name: file_name. Will correspond to object key in S3
     :param bucket: Bucket to upload to
     :return: aws_image_src: URL to image in S3
-    """
-
+     """
 
 
     # Upload the file
@@ -37,10 +36,11 @@ def upload_file(image_binary, file_name):
             Body=image_binary,
             Bucket=BUCKET_NAME,
             Key=file_name,
-            ContentType='image/jpeg')
+            ContentType=content_type
+        )
 
-        aws_image_src = response.get_resource_url(BUCKET_NAME, file_name)
-        print("upload_file", aws_image_src)
+        # url = f"{bucket_name}.s3.{location}.amazonaws.com/{key}"
+        aws_image_src = f'{BUCKET_NAME}.s3.{REGION}.amazonaws.com/{file_name}'
 
     except ClientError as e:
         logging.error(e)
