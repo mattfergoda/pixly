@@ -41,5 +41,10 @@ REMEMBER CORS ISSUES, test our flask-cors setup
     - black and white
     - sepia?
 
-
+## Nice to haves once done
+- Alerts in front end
+- JPEG format validation
+- Styling
+- Tests
+- More image edits
 

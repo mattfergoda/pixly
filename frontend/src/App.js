@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { fetchImages } from "./api";
+import { fetchImages, submitNewImage } from "./api";
 import './App.css';
 
 import RouteList from "./RouteList";
@@ -30,12 +30,21 @@ function App() {
     getAllImages();
   }, []);
 
+  /** Submit new image to the API and update images state
+   * Takes image: { image_file, caption, description, file_name }
+   */
+
+  async function addImage(imageToAdd) {
+    const imageAdded = await submitNewImage(imageToAdd)
+
+    setImages(formerImages => [...formerImages, imageAdded])
+  }
 
   return (
     <div className="App">
       <BrowserRouter>
         {/* <NavBar /> */}
-        <RouteList images={images} />
+        <RouteList images={images} addImage={addImage}/>
       </BrowserRouter>
     </div>
   );

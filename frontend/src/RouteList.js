@@ -28,7 +28,7 @@ function RouteList({ images, addImage }) {
           element={<Home />} />
         <Route
           path="/new"
-          element={<NewImageForm />} />
+          element={<NewImageForm addImage={addImage}/>} />
         <Route
           path="/images"
           element={<ImageList images={images} />} />
