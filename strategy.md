@@ -10,7 +10,6 @@ DATA REQUIRMENTS
 
 
 STACK
-
 postgres
 sqlalchemy
 python
@@ -18,8 +17,29 @@ flask
 react
 css, reactstrap?
 
-# Pillow
-Accessing exif data:
-- https://stackoverflow.com/questions/4764932/in-python-how-do-i-read-the-exif-data-for-an-image
-- https://pillow.readthedocs.io/en/stable/reference/Image.html#PIL.Image.Exif
+
+SEARCH
+- simple search by file name using ILIKE ala jobly backend 1 hour
+- postgres full text search too much?
+
+
+FRONTEND
+REMEMBER CORS ISSUES, test our flask-cors setup
+
+`NavBar` component
+`RouteList` component
+`Homepage` component with links to
+
+- List of All images (`ImageList`)
+    - `Search` bar component
+    - each `ImageDetail` component has/is a link to edit that image
+
+- `UploadForm` for uploading image
+
+- `EditForm` component
+    - radio buttons?
+    - black and white
+    - sepia?
+
+
 

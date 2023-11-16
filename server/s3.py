@@ -27,11 +27,10 @@ def upload_file(image_binary, file_name, content_type='image/jpeg'):
     :return: aws_image_src: URL to image in S3
      """
 
-
     # Upload the file
     try:
         # response = s3.upload_file(file_name, bucket, object_name)
-        response = s3.put_object(
+        s3.put_object(
             Body=image_binary,
             Bucket=BUCKET_NAME,
             Key=file_name,

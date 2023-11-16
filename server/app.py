@@ -3,6 +3,7 @@ import io
 
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 from models import db, connect_db, Image
 from image_utils import scrape_exif, convert_monochrome, convert_to_PIL_image, transpose
@@ -11,15 +12,15 @@ from s3 import upload_file, get_s3_file
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     "DATABASE_URL", 'postgresql:///pixly')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
-# app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 connect_db(app)
-
 
 
 @app.get("/images")
@@ -52,7 +53,6 @@ def get_image(file_name):
 
 
 
-
 @app.post("/images")
 def upload_image():
     """ Takes in a multipart form:
@@ -77,10 +77,11 @@ def upload_image():
     # scrape metadata
     exif_data = scrape_exif(image_file)
 
+    # replace file reading 'cursor' to beginning because it read already
     image_file.seek(0)
+
     # save image in s3 and get back image url
     # content_type = image_file.content_type
-
     aws_image_src = upload_file(image_file, file_name)
 
     # save metadata and other data in db.
@@ -94,8 +95,6 @@ def upload_image():
 
     db.session.add(new_image)
     db.session.commit()
-
-    # figure out what we send back to the user and send it.
 
     return (jsonify(image={
         "file_name": file_name,
@@ -124,6 +123,7 @@ def edit_image(file_name):
     bw = request.json.get('bw')
 
     if bw is True:
+
         # download file from s3
         image_binary = get_s3_file(file_name)
 
