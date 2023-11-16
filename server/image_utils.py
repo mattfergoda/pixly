@@ -1,4 +1,4 @@
-from PIL import Image, ExifTags, TiffImagePlugin
+from PIL import Image, ExifTags, TiffImagePlugin, ImageOps
 
 def scrape_exif(image):
     """
@@ -28,7 +28,7 @@ def scrape_exif(image):
 
 def convert_to_PIL_image(image_binary):
     """ Takes in an image binary and returns a PIL Image object """
-    
+
     return Image.open(image_binary)
 
 
@@ -36,3 +36,10 @@ def convert_monochrome(image):
     """ Takes in a PIL Image, returns PIL Image in black and white """
 
     return image.convert("L")
+
+def transpose(image):
+    """ Transposes an image based on int's EXIF data.
+    Takes image (PIL Image)
+    """
+
+    return ImageOps.exif_transpose(image)

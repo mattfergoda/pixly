@@ -1,9 +1,11 @@
 import os
+import io
+
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 
 from models import db, connect_db, Image
-from image_utils import scrape_exif, convert_monochrome, convert_to_PIL_image
+from image_utils import scrape_exif, convert_monochrome, convert_to_PIL_image, transpose
 from s3 import upload_file, get_s3_file
 
 load_dotenv()
@@ -130,10 +132,17 @@ def edit_image(file_name):
 
         # convert to black and white
         bw_img = convert_monochrome(img)
+        bw_img = transpose(bw_img)
 
         # save updated image in s3
-        upload_file(bw_img, file_name)
+        bw_img.seek(0)
+        bw_img_bytes_arr = io.BytesIO()
+        bw_img.save(bw_img_bytes_arr, format='JPEG')
+        bw_img_bytes = bw_img_bytes_arr.getvalue()
 
+        upload_file(bw_img_bytes, file_name)
+
+        bw_img_bytes_arr.close()
 
     # update postgres db
     db.session.commit()
