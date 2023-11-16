@@ -1,4 +1,4 @@
-import { Form, FormGroup, Label, Input } from "reactstrap";
+import { Form, FormGroup, Label, Input, Card } from "reactstrap";
 
 function NewImageForm() {
   return (
