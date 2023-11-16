@@ -4,6 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { fetchImages } from "./api";
 import './App.css';
 
+import RouteList from "./RouteList";
+
 /**
  * Main logic component for Pixly
  *

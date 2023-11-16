@@ -1,6 +1,12 @@
 import React from "react";
 import { Route, Routes, Navigate } from 'react-router-dom';
 
+import Home from "./Home";
+import ImageDetail from "./ImageDetail";
+import ImageEditForm from "./ImageEditForm";
+import ImageList from "./ImageList";
+import NewImageForm from "./NewImageForm";
+
 /**
  * Route list component
  * renders all the routes
@@ -12,7 +18,7 @@ import { Route, Routes, Navigate } from 'react-router-dom';
  *
  * App -> RouteList -> {NewImageForm, ImageEditForm, ImageList, ImageDetail, Home}
  */
-function RouteList({ images }) {
+function RouteList({ images, addImage }) {
 
   return (
     <main>
@@ -22,7 +28,7 @@ function RouteList({ images }) {
           element={<Home />} />
         <Route
           path="/new"
-          element={<NewImageForm addImage={addImage} />} />
+          element={<NewImageForm />} />
         <Route
           path="/images"
           element={<ImageList images={images} />} />
