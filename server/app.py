@@ -3,10 +3,17 @@ import io
 
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
+from sqlalchemy.types import Unicode
+
 from flask_cors import CORS
 
 from models import db, connect_db, Image
-from image_utils import scrape_exif, convert_monochrome, convert_to_PIL_image, transpose
+from image_utils import (
+    scrape_exif,
+    convert_monochrome,
+    convert_to_PIL_image,
+    transpose
+)
 from s3 import upload_file, get_s3_file
 
 load_dotenv()
@@ -26,10 +33,20 @@ connect_db(app)
 @app.get("/images")
 def get_all_images():
     """ Returns JSON like { images: [image, ...] }
-        where image is { file_name, caption, description, aws_image_src, exif_data }
+        where image is
+        { file_name, caption, description, aws_image_src, exif_data }
+        Takes option query string fileNameLike for searching by file name.
     """
 
-    images = Image.query.all()
+    term = request.args.get('searchTerm')
+
+    if term:
+        images = Image.query.filter(
+            (Image.exif_data.cast(Unicode).ilike(f'%{term}%')
+             | Image.file_name.ilike(f'%{term}%'))
+        )
+    else:
+        images = Image.query.all()
 
     serialized = [img.serialize() for img in images]
 
@@ -38,7 +55,8 @@ def get_all_images():
 
 @app.get("/images/<string:file_name>")
 def get_image(file_name):
-    """ Returns JSON like { file_name, caption, description, aws_image_src, exif_data }
+    """ Returns JSON like
+    { file_name, caption, description, aws_image_src, exif_data }
     """
 
     image = Image.query.get(file_name)
@@ -108,7 +126,8 @@ def upload_image():
 
 @app.patch("/images/<string:file_name>")
 def edit_image(file_name):
-    """ Takes in an object with the properties to edit {property: new value, ... }"""
+    """ Takes in an object with the properties to edit
+    {property: new value, ... }"""
 
     image = Image.query.get(file_name)
 
@@ -131,18 +150,18 @@ def edit_image(file_name):
         img = convert_to_PIL_image(image_binary)
 
         # convert to black and white
-        bw_img = convert_monochrome(img)
-        bw_img = transpose(bw_img)
+        img = convert_monochrome(img)
+        img = transpose(img)
 
         # save updated image in s3
-        bw_img.seek(0)
-        bw_img_bytes_arr = io.BytesIO()
-        bw_img.save(bw_img_bytes_arr, format='JPEG')
-        bw_img_bytes = bw_img_bytes_arr.getvalue()
+        img.seek(0)
+        img_bytes_arr = io.BytesIO()
+        img.save(img_bytes_arr, format='JPEG')
+        img_bytes = img_bytes_arr.getvalue()
 
-        upload_file(bw_img_bytes, file_name)
+        upload_file(img_bytes, file_name)
 
-        bw_img_bytes_arr.close()
+        img_bytes_arr.close()
 
     # update postgres db
     db.session.commit()

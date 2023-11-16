@@ -18,7 +18,12 @@ def scrape_exif(image):
     else:
         for key, val in img_exif.items():
             if key in ExifTags.TAGS:
-                metadata[ExifTags.TAGS[key]] = float(val) if isinstance(val, TiffImagePlugin.IFDRational) else val
+                if isinstance(val, (TiffImagePlugin.IFDRational)):
+                    metadata[ExifTags.TAGS[key]] = float(val)
+                elif isinstance(val, (bytes)):
+                    pass
+                else:
+                    metadata[ExifTags.TAGS[key]] = val
             else:
                 print(f'{key}:{val}')
                 metadata[key] = val
