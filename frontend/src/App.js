@@ -25,34 +25,27 @@ function App() {
   console.log('STATE IMAGES=', images);
 
   useEffect(function fetchImagesOnMount() {
-    getAllImages()
+    getImages();
   }, []);
 
-  async function getAllImages() {
-      const imageData = await fetchImages();
-      setImages(imageData.images);
-      setIsLoading(false);
-    }
+  /** Get all images from the API and update Images state
+   * Takes optional parameter searchTerm.
+   */
+
+  async function getImages(searchTerm) {
+    const imageData = await fetchImages(searchTerm);
+    setImages(imageData.images);
+    setIsLoading(false);
+  }
 
   /** Submit new image to the API and update images state
    * Takes image: { image_file, caption, description, file_name }
    */
 
   async function addImage(imageToAdd) {
-    const imageAdded = await submitNewImage(imageToAdd)
+    const imageAdded = await submitNewImage(imageToAdd);
 
-    setImages(formerImages => [...formerImages, imageAdded])
-  }
-
-
-  /**
-   * Handle image search
-   */
-
-  async function searchImages(term) {
-    const filteredImageData = await fetchImages(term);
-    console.log('FILTERED IMAGE DATA=', filteredImageData)
-    setImages(filteredImageData.images)
+    setImages(formerImages => [...formerImages, imageAdded]);
   }
 
 
@@ -60,12 +53,11 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Navigation />
-        { !isLoading && (
-        <RouteList
-          images={images}
-          addImage={addImage}
-          searchImages={searchImages}
-          getAllImages={getAllImages}/>)}
+        {!isLoading && (
+          <RouteList
+            images={images}
+            addImage={addImage}
+            getImages={getImages} />)}
       </BrowserRouter>
     </div>
   );

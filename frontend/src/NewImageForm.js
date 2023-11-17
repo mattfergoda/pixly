@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Form, FormGroup, Label, Input, Button } from "reactstrap";
+import { Form, FormGroup, Label, Input, Button, Card, CardBody } from "reactstrap";
 
 /** NewImageForm form component
  * State:
@@ -56,7 +56,8 @@ function NewImageForm({ addImage }) {
   }
 
   return (
-    <div className="NewImageForm">
+    <Card className="NewImageForm border-light col-md-4 offset-md-4">
+      <CardBody>
       <Form onSubmit={handleSubmit}>
         <FormGroup>
           <Label for="file_name">
@@ -107,7 +108,8 @@ function NewImageForm({ addImage }) {
         </FormGroup>
         <Button>Submit</Button>
       </Form>
-    </div>
+      </CardBody>
+    </Card>
   );
 }
 

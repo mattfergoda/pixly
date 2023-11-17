@@ -2,9 +2,16 @@ import ImageCard from "./ImageCard";
 import SearchBar from "./SearchBar";
 
 
-/**
+/** Presentational component for displaying images
+ * Props:
+ * - images:
+ *  { file_name, uploaded_at, aws_image_src, caption, description, exif_data }
+ *  and exif_data is JSON of variable length like { <exif-tag-name>: <value> }
+ * - searchImages: Function for handling searching images, called in ancestor.
  *
+ * RouteList -> ImageList
  */
+
 function ImageList({ images, searchImages }) {
 
 
@@ -15,7 +22,7 @@ function ImageList({ images, searchImages }) {
 
       <SearchBar searchImages={searchImages}/>
        {images.map(image => <ImageCard image={image} key={image.file_name}/>)}
-
+       {images.length === 0 && <h4>No images match your search.</h4>}
       </div>
     </>
   )
