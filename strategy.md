@@ -43,8 +43,11 @@ REMEMBER CORS ISSUES, test our flask-cors setup
 
 ## Nice to haves once done
 - Alerts in front end
+- description text area?
 - JPEG format validation
 - Styling
 - Tests
 - More image edits
+- last modified
+- add caption/description to search
 

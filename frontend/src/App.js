@@ -40,11 +40,22 @@ function App() {
     setImages(formerImages => [...formerImages, imageAdded])
   }
 
+
+  /**
+   * Handle image search
+   */
+  async function searchImages(term) {
+    const filteredImageData = await fetchImages(term);
+    console.log('FILTERED IMAGE DATA=', filteredImageData)
+    setImages(filteredImageData.images)
+  }
+
+
   return (
     <div className="App">
       <BrowserRouter>
         {/* <NavBar /> */}
-        <RouteList images={images} addImage={addImage}/>
+        <RouteList images={images} addImage={addImage} searchImages={searchImages}/>
       </BrowserRouter>
     </div>
   );

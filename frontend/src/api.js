@@ -10,6 +10,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:5000";
  *  and exif_data is JSON of variable length like { <exif-tag-name>: <value> }
  */
 export async function fetchImages(searchTerm) {
+  console.log('SEARCH TERM=', searchTerm)
 
   const url = new URL(`${BASE_URL}/images`);
 
@@ -17,8 +18,8 @@ export async function fetchImages(searchTerm) {
     'content-type': 'application/multiform',
   };
 
-  url.searchTerm = searchTerm ? new URLSearchParams(searchTerm).toString() : '';
-
+  url.searchParams.set('searchTerm', searchTerm || '') 
+  console.log('URL=', url)
   const response = await fetch(url, { method: 'GET', headers });
 
   const imagesData = await response.json();
@@ -30,7 +31,7 @@ export async function fetchImages(searchTerm) {
 
 /** Submit a new image to the API
  * Takes multipart data: { image_file, caption, description, file_name }
- * Returns { image } where image is 
+ * Returns { image } where image is
  *  { file_name, uploaded_at, aws_image_src, caption, description, exif_data }
  *  and exif_data is JSON of variable length like { <exif-tag-name>: <value> }
  */

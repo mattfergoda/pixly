@@ -41,12 +41,13 @@ def get_all_images():
     term = request.args.get('searchTerm')
 
     if term:
-        images = Image.query.filter(
+        images = Image.query.order_by(Image.uploaded_at.desc()).filter(
             (Image.exif_data.cast(Unicode).ilike(f'%{term}%')
              | Image.file_name.ilike(f'%{term}%'))
         )
     else:
-        images = Image.query.all()
+        images = Image.query.order_by(Image.uploaded_at.desc()).all()
+
 
     serialized = [img.serialize() for img in images]
 
