@@ -18,7 +18,7 @@ export async function fetchImages(searchTerm) {
     'content-type': 'application/multiform',
   };
 
-  url.searchParams.set('searchTerm', searchTerm || '') 
+  url.searchParams.set('searchTerm', searchTerm || '')
   console.log('URL=', url)
   const response = await fetch(url, { method: 'GET', headers });
 
@@ -52,5 +52,33 @@ export async function submitNewImage(data) {
   const imageAdded = await response.json();
 
   return imageAdded
+
+}
+
+/** Edit an image
+ * Takes fileName, caption [optional], description [optional], makeBW [optional]
+ * returns { msg }
+ */
+export async function editImage({ file_name, caption, description, makeBW }) {
+  const data = {
+    caption,
+    description,
+    bw: makeBW
+  }
+
+  const headers = {
+    'content-type': 'application/json',
+  };
+
+  console.log("editImage, data=", data);
+
+  const url = new URL(`${BASE_URL}/images/${file_name}`);
+  const response = await fetch(url, {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+    headers
+  });
+
+  return await response.json();
 
 }

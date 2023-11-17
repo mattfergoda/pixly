@@ -19,16 +19,19 @@ import RouteList from "./RouteList";
 function App() {
 
   const [images, setImages] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   console.log('STATE IMAGES=', images);
 
   useEffect(function fetchImagesOnMount() {
-    async function getAllImages() {
+    getAllImages()
+  }, []);
+
+  async function getAllImages() {
       const imageData = await fetchImages();
       setImages(imageData.images);
+      setIsLoading(false);
     }
-    getAllImages();
-  }, []);
 
   /** Submit new image to the API and update images state
    * Takes image: { image_file, caption, description, file_name }
@@ -44,6 +47,7 @@ function App() {
   /**
    * Handle image search
    */
+
   async function searchImages(term) {
     const filteredImageData = await fetchImages(term);
     console.log('FILTERED IMAGE DATA=', filteredImageData)
@@ -55,7 +59,12 @@ function App() {
     <div className="App">
       <BrowserRouter>
         {/* <NavBar /> */}
-        <RouteList images={images} addImage={addImage} searchImages={searchImages}/>
+        { !isLoading && (
+        <RouteList
+          images={images}
+          addImage={addImage}
+          searchImages={searchImages}
+          getAllImages={getAllImages}/>)}
       </BrowserRouter>
     </div>
   );

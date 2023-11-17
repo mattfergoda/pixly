@@ -18,7 +18,7 @@ import NewImageForm from "./NewImageForm";
  *
  * App -> RouteList -> {NewImageForm, ImageEditForm, ImageList, ImageDetail, Home}
  */
-function RouteList({ images, addImage, searchImages }) {
+function RouteList({ images, addImage, searchImages, getAllImages }) {
 
   return (
     <main>
@@ -37,7 +37,7 @@ function RouteList({ images, addImage, searchImages }) {
           element={<ImageDetail />} />
         <Route
           path="/images/:name/edit"
-          element={<ImageEditForm />} />
+          element={<ImageEditForm images={images} getAllImages={getAllImages}/>} />
         <Route
           path="*"
           element={<Navigate to='/' />} />

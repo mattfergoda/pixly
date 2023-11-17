@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Card, CardBody, CardTitle, CardSubtitle, CardText, Button } from "reactstrap"
 
 
@@ -35,9 +36,11 @@ function ImageCard({ image }) {
     <CardText>
       { image.description }
     </CardText>
-    <Button>
-      Edit Image
-    </Button>
+    <Link to={`/images/${image.file_name}/edit`}>
+      <Button>
+        Edit Image
+      </Button>
+    </Link>
   </CardBody>
 </Card>
   )
