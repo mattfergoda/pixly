@@ -13,7 +13,7 @@ import { Card, CardBody, CardTitle, CardSubtitle, CardText, Button } from "react
 function ImageCard({ image }) {
 
   return(
-    <Card
+    <Card className=" m-4"
   style={{
     width: '18rem'
   }}

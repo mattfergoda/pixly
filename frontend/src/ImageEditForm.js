@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { Form, FormGroup, Label, Input, Button } from "reactstrap";
+import { Card, Form, FormGroup, Label, Input, Button } from "reactstrap";
 import { editImage } from "./api";
 import "./ImageEditForm.css";
 
@@ -53,7 +53,7 @@ function ImageEditForm({ images, getAllImages }) {
   }
 
   return (
-    <div className="ImageEditForm">
+    <Card className="ImageEditForm">
       <h1>Edit {image.file_name}</h1>
       <img
         alt={image.caption}
@@ -100,7 +100,7 @@ function ImageEditForm({ images, getAllImages }) {
         <Button>Submit</Button>
       </Form>
 
-    </div>
+    </Card>
   );
 }
 

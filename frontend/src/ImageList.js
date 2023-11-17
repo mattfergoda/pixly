@@ -1,6 +1,6 @@
 import ImageCard from "./ImageCard";
 import SearchBar from "./SearchBar";
-import { fetchImages } from "./api";
+
 
 /**
  *
@@ -10,7 +10,7 @@ function ImageList({ images, searchImages }) {
 
   return (
     <>
-      <div className="ImageList">
+      <div className="ImageList col-md-4 offset-md-4 m-3">
         <h1>All Images</h1>
 
       <SearchBar searchImages={searchImages}/>

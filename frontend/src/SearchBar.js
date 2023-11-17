@@ -31,7 +31,7 @@ function SearchBar({ searchImages }) {
     }
 
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} className="d-flex p-2 col-md-12">
             <Input className="form-control me-sm-2"
                 value={formData}
                 onChange={handleChange} />

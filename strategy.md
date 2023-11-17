@@ -50,4 +50,6 @@ REMEMBER CORS ISSUES, test our flask-cors setup
 - More image edits
 - last modified
 - add caption/description to search
+- adding new image doesn't show up right away in all images
+- undo edit
 

@@ -5,6 +5,7 @@ import { fetchImages, submitNewImage } from "./api";
 import './App.css';
 
 import RouteList from "./RouteList";
+import Navigation from './Navigation';
 
 /**
  * Main logic component for Pixly
@@ -58,7 +59,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        {/* <NavBar /> */}
+        <Navigation />
         { !isLoading && (
         <RouteList
           images={images}
