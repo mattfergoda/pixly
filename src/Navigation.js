@@ -1,6 +1,6 @@
 import React from "react";
 import { } from "react-router-dom";
-import { Nav, NavItem, Navbar, NavbarBrand, NavLink, Collapse, NavbarToggler } from "reactstrap";
+import { Nav, NavItem, Navbar, NavbarBrand, NavLink } from "reactstrap";
 
 /**
  * Navigation bar component
