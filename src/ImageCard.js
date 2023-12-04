@@ -21,7 +21,7 @@ function ImageCard({ image }) {
 
   <img
     alt={ image.caption }
-    src={`https://${ image.aws_image_src }`}
+    src={`https://${ image.aws_image_src }?${new Date().getTime()}`}
   />
   <CardBody>
     <CardTitle tag="h5">
