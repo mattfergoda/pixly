@@ -1,7 +1,18 @@
 # Pixly
-A photo storage and editing application leveraging AWS S3 for storage with a Flask backend ([repo here](https://github.com/mattfergoda/pixly-backend)).
 
-Photos are searchable by EXIF metadata.
+The React frontend for photo storage and editing application that communicates with a Flask API. Photos are searchable by EXIF metadata.
+
+[Backend repo](https://github.com/mattfergoda/pixly-backend)
+
+[Live App Demo](https://pixly.demo.mattfergoda.me/)
+
+> **Note:**  It can take a few minutes for the backend demo to spin up. The app may appear unresponsive during that time.
+
+## Future Work
+- Add tests.
+- Improve styling.
+- Add additional photo edit actions and edit rollback once implemented on the backend.
+- Add user auth once implemented on the backend.
 
 # Getting Started with Create React App
 
